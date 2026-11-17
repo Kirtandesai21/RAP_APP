@@ -1,0 +1,5 @@
+[
+  { "AgencyID": "070001", "Name": "Sunset Travel Agency", "City": "Frankfurt", "CountryCode": "DE" },
+  { "AgencyID": "070002", "Name": "Fly High Logistics", "City": "New York", "CountryCode": "US" },
+  { "AgencyID": "070003", "Name": "Global Voyager Inc.", "City": "London", "CountryCode": "GB" }
+]

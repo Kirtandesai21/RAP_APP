@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_DEVC" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <DEVC>
+    <DEVCLASS>ZRAP_TRAVEL_001</DEVCLASS>
+    <LANGUAGE>E</LANGUAGE>
+    <RESPONSIBLE>SAP_USER</RESPONSIBLE>
+    <MASTERLANG>E</MASTERLANG>
+    <DLVUNIT>LOCAL</DLVUNIT>
+    <AS4USER>SAP_USER</AS4USER>
+    <CTEXT>RAP Travel Application Demo</CTEXT>
+   </DEVC>
+  </asx:values>
+ </asx:abap>
+</abapGit>

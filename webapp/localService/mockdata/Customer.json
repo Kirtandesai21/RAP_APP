@@ -1,0 +1,6 @@
+[
+  { "CustomerID": "000001", "FirstName": "Hans", "LastName": "Buchholm", "City": "Berlin", "CountryCode": "DE" },
+  { "CustomerID": "000002", "FirstName": "John", "LastName": "Becker", "City": "Chicago", "CountryCode": "US" },
+  { "CustomerID": "000003", "FirstName": "Sarah", "LastName": "Schmidt", "City": "Munich", "CountryCode": "DE" },
+  { "CustomerID": "000004", "FirstName": "Petra", "LastName": "Müller", "City": "Hamburg", "CountryCode": "DE" }
+]

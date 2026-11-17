@@ -1,0 +1,82 @@
+@Metadata.layer: #CORE
+@UI: {
+  headerInfo: {
+    typeName: 'Booking',
+    typeNamePlural: 'Bookings',
+    title: { type: #STANDARD, label: 'Booking', value: 'BookingID' }
+  }
+}
+annotate view ZC_RAP_BOOKING_001 with
+{
+  @UI.facet: [
+    {
+      id: 'BookingDetails',
+      purpose: #STANDARD,
+      type: #IDENTIFICATION_REFERENCE,
+      label: 'Booking Details',
+      position: 10
+    }
+  ]
+
+  @UI.hidden: true
+  BookingUUID;
+
+  @UI.hidden: true
+  TravelUUID;
+
+  @UI: {
+    lineItem: [{ position: 10, importance: #HIGH, label: 'Booking ID' }],
+    identification: [{ position: 10, label: 'Booking ID' }]
+  }
+  BookingID;
+
+  @UI: {
+    lineItem: [{ position: 20, importance: #HIGH, label: 'Booking Date' }],
+    identification: [{ position: 20, label: 'Booking Date' }]
+  }
+  BookingDate;
+
+  @UI: {
+    lineItem: [{ position: 30, importance: #HIGH, label: 'Customer' }],
+    identification: [{ position: 30, label: 'Customer' }]
+  }
+  CustomerID;
+
+  @UI: {
+    lineItem: [{ position: 40, importance: #HIGH, label: 'Airline' }],
+    identification: [{ position: 40, label: 'Airline' }]
+  }
+  CarrierID;
+
+  @UI: {
+    lineItem: [{ position: 50, importance: #HIGH, label: 'Flight Number' }],
+    identification: [{ position: 50, label: 'Flight Connection' }]
+  }
+  ConnectionID;
+
+  @UI: {
+    lineItem: [{ position: 60, importance: #HIGH, label: 'Flight Date' }],
+    identification: [{ position: 60, label: 'Flight Date' }]
+  }
+  FlightDate;
+
+  @UI: {
+    lineItem: [{ position: 70, importance: #HIGH, label: 'Price' }],
+    identification: [{ position: 70, label: 'Flight Price' }]
+  }
+  FlightPrice;
+
+  @UI: {
+    identification: [{ position: 80, label: 'Currency' }]
+  }
+  CurrencyCode;
+
+  @UI: {
+    lineItem: [{ position: 80, importance: #HIGH, label: 'Status' }],
+    identification: [{ position: 90, label: 'Status' }]
+  }
+  BookingStatus;
+
+  @UI.hidden: true
+  LocalLastChangedAt;
+}

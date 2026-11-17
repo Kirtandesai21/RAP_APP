@@ -1,0 +1,8 @@
+---
+applications:
+- name: rap-travel-fiori-elements
+  memory: 128M
+  disk_quota: 256M
+  buildpack: staticfile_buildpack
+  path: webapp
+  random-route: true

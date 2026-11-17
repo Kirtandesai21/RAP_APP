@@ -1,0 +1,21 @@
+_schema-version: '3.2'
+ID: rap-travel-app
+version: 1.0.0
+description: "SAP RAP and Fiori Elements Travel Application"
+
+modules:
+  - name: rap-travel-fiori-elements
+    type: html5
+    path: webapp
+    build-parameters:
+      builder: custom
+      commands:
+        - echo "Building UI5..."
+      supported-platforms: []
+
+resources:
+  - name: rap-travel-destination-service
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-plan: lite

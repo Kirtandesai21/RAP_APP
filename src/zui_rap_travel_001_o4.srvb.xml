@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SRVB" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <SRVB>
+    <NAME>ZUI_RAP_TRAVEL_001_O4</NAME>
+    <TYPE>ODATA</TYPE>
+    <SUBTYPE>V4</SUBTYPE>
+    <CATEGORY>UI</CATEGORY>
+    <SERVICE_NAME>ZUI_RAP_TRAVEL_001_O4</SERVICE_NAME>
+    <DESCRIPTION>Service Binding OData V4 - Travel Application</DESCRIPTION>
+   </SRVB>
+  </asx:values>
+ </asx:abap>
+</abapGit>

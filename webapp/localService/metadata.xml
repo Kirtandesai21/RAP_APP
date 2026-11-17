@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+  <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+    <edmx:Include Namespace="Org.OData.Core.V1" Alias="Core"/>
+  </edmx:Reference>
+  <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Measures.V1.xml">
+    <edmx:Include Namespace="Org.OData.Measures.V1" Alias="Measures"/>
+  </edmx:Reference>
+  <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Common.V1.xml">
+    <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+  </edmx:Reference>
+  <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.UI.V1.xml">
+    <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="UI"/>
+  </edmx:Reference>
+  <edmx:DataServices>
+    <Schema Namespace="ZUI_RAP_TRAVEL_001_O4" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+      <EntityType Name="TravelType">
+        <Key>
+          <PropertyRef Name="TravelUUID"/>
+        </Key>
+        <Property Name="TravelUUID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="TravelID" Type="Edm.String" MaxLength="8"/>
+        <Property Name="AgencyID" Type="Edm.String" MaxLength="6"/>
+        <Property Name="AgencyName" Type="Edm.String" MaxLength="80"/>
+        <Property Name="CustomerID" Type="Edm.String" MaxLength="6"/>
+        <Property Name="CustomerName" Type="Edm.String" MaxLength="80"/>
+        <Property Name="BeginDate" Type="Edm.Date"/>
+        <Property Name="EndDate" Type="Edm.Date"/>
+        <Property Name="BookingFee" Type="Edm.Decimal" Precision="16" Scale="2"/>
+        <Property Name="TotalPrice" Type="Edm.Decimal" Precision="16" Scale="2"/>
+        <Property Name="CurrencyCode" Type="Edm.String" MaxLength="5"/>
+        <Property Name="Description" Type="Edm.String" MaxLength="102"/>
+        <Property Name="OverallStatus" Type="Edm.String" MaxLength="1"/>
+        <Property Name="OverallStatusText" Type="Edm.String" MaxLength="20"/>
+        <Property Name="LocalLastChangedAt" Type="Edm.DateTimeOffset"/>
+        <NavigationProperty Name="_Booking" Type="Collection(ZUI_RAP_TRAVEL_001_O4.BookingType)" Partner="_Travel"/>
+      </EntityType>
+
+      <EntityType Name="BookingType">
+        <Key>
+          <PropertyRef Name="BookingUUID"/>
+        </Key>
+        <Property Name="BookingUUID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="TravelUUID" Type="Edm.Guid" Nullable="false"/>
+        <Property Name="BookingID" Type="Edm.String" MaxLength="4"/>
+        <Property Name="BookingDate" Type="Edm.Date"/>
+        <Property Name="CustomerID" Type="Edm.String" MaxLength="6"/>
+        <Property Name="CustomerName" Type="Edm.String" MaxLength="80"/>
+        <Property Name="CarrierID" Type="Edm.String" MaxLength="3"/>
+        <Property Name="ConnectionID" Type="Edm.String" MaxLength="4"/>
+        <Property Name="FlightDate" Type="Edm.Date"/>
+        <Property Name="FlightPrice" Type="Edm.Decimal" Precision="16" Scale="2"/>
+        <Property Name="CurrencyCode" Type="Edm.String" MaxLength="5"/>
+        <Property Name="BookingStatus" Type="Edm.String" MaxLength="1"/>
+        <Property Name="LocalLastChangedAt" Type="Edm.DateTimeOffset"/>
+        <NavigationProperty Name="_Travel" Type="ZUI_RAP_TRAVEL_001_O4.TravelType" Partner="_Booking"/>
+      </EntityType>
+
+      <EntityContainer Name="EntityContainer">
+        <EntitySet Name="Travel" EntityType="ZUI_RAP_TRAVEL_001_O4.TravelType">
+          <NavigationPropertyBinding Path="_Booking" Target="Booking"/>
+        </EntitySet>
+        <EntitySet Name="Booking" EntityType="ZUI_RAP_TRAVEL_001_O4.BookingType">
+          <NavigationPropertyBinding Path="_Travel" Target="Travel"/>
+        </EntitySet>
+      </EntityContainer>
+
+      <Annotations Target="ZUI_RAP_TRAVEL_001_O4.TravelType">
+        <Annotation Term="UI.HeaderInfo">
+          <Record>
+            <PropertyValue Property="TypeName" String="Travel"/>
+            <PropertyValue Property="TypeNamePlural" String="Travels"/>
+            <PropertyValue Property="Title">
+              <Record Type="UI.DataField">
+                <PropertyValue Property="Value" Path="TravelID"/>
+              </Record>
+            </PropertyValue>
+            <PropertyValue Property="Description">
+              <Record Type="UI.DataField">
+                <PropertyValue Property="Value" Path="Description"/>
+              </Record>
+            </PropertyValue>
+          </Record>
+        </Annotation>
+
+        <Annotation Term="UI.SelectionFields">
+          <Collection>
+            <PropertyPath>TravelID</PropertyPath>
+            <PropertyPath>AgencyID</PropertyPath>
+            <PropertyPath>CustomerID</PropertyPath>
+            <PropertyPath>OverallStatus</PropertyPath>
+          </Collection>
+        </Annotation>
+
+        <Annotation Term="UI.LineItem">
+          <Collection>
+            <Record Type="UI.DataFieldForAction">
+              <PropertyValue Property="Label" String="Accept Travel"/>
+              <PropertyValue Property="Action" String="ZUI_RAP_TRAVEL_001_O4.acceptTravel"/>
+            </Record>
+            <Record Type="UI.DataFieldForAction">
+              <PropertyValue Property="Label" String="Reject Travel"/>
+              <PropertyValue Property="Action" String="ZUI_RAP_TRAVEL_001_O4.rejectTravel"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Label" String="Travel ID"/>
+              <PropertyValue Property="Value" Path="TravelID"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Label" String="Agency"/>
+              <PropertyValue Property="Value" Path="AgencyID"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Label" String="Customer"/>
+              <PropertyValue Property="Value" Path="CustomerID"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Label" String="Start Date"/>
+              <PropertyValue Property="Value" Path="BeginDate"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Label" String="End Date"/>
+              <PropertyValue Property="Value" Path="EndDate"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Label" String="Total Price"/>
+              <PropertyValue Property="Value" Path="TotalPrice"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Label" String="Status"/>
+              <PropertyValue Property="Value" Path="OverallStatus"/>
+              <PropertyValue Property="Criticality" Path="OverallStatusCriticality"/>
+            </Record>
+          </Collection>
+        </Annotation>
+
+        <Annotation Term="UI.Facets">
+          <Collection>
+            <Record Type="UI.ReferenceFacet">
+              <PropertyValue Property="ID" String="GeneralInfo"/>
+              <PropertyValue Property="Label" String="General Information"/>
+              <PropertyValue Property="Target" AnnotationPath="@UI.Identification"/>
+            </Record>
+            <Record Type="UI.ReferenceFacet">
+              <PropertyValue Property="ID" String="Bookings"/>
+              <PropertyValue Property="Label" String="Bookings"/>
+              <PropertyValue Property="Target" AnnotationPath="_Booking/@UI.LineItem"/>
+            </Record>
+          </Collection>
+        </Annotation>
+
+        <Annotation Term="UI.Identification">
+          <Collection>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Label" String="Travel ID"/>
+              <PropertyValue Property="Value" Path="TravelID"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Label" String="Agency ID"/>
+              <PropertyValue Property="Value" Path="AgencyID"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Label" String="Customer ID"/>
+              <PropertyValue Property="Value" Path="CustomerID"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Label" String="Description"/>
+              <PropertyValue Property="Value" Path="Description"/>
+            </Record>
+            <Record Type="UI.DataField">
+              <PropertyValue Property="Label" String="Overall Status"/>
+              <PropertyValue Property="Value" Path="OverallStatus"/>
+            </Record>
+          </Collection>
+        </Annotation>
+      </Annotations>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>

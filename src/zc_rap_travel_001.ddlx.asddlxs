@@ -1,0 +1,141 @@
+@Metadata.layer: #CORE
+@UI: {
+  headerInfo: {
+    typeName: 'Travel',
+    typeNamePlural: 'Travels',
+    title: { type: #STANDARD, label: 'Travel', value: 'TravelID' },
+    description: { type: #STANDARD, value: 'Description' }
+  },
+  presentationVariant: [{
+    sortOrder: [{ by: 'TravelID', direction: #DESC }],
+    visualizations: [{ type: #AS_LINEITEM }]
+  }]
+}
+annotate view ZC_RAP_TRAVEL_001 with
+{
+  /* Facets for Object Page */
+  @UI.facet: [
+    {
+      id: 'HeaderStatus',
+      purpose: #HEADER,
+      type: #DATAPOINT_REFERENCE,
+      targetQualifier: 'StatusData',
+      position: 10
+    },
+    {
+      id: 'HeaderTotalPrice',
+      purpose: #HEADER,
+      type: #DATAPOINT_REFERENCE,
+      targetQualifier: 'PriceData',
+      position: 20
+    },
+    {
+      id: 'GeneralInfoCollection',
+      purpose: #STANDARD,
+      type: #COLLECTION,
+      label: 'General Information',
+      position: 10
+    },
+    {
+      id: 'TravelDetailsFacet',
+      purpose: #STANDARD,
+      type: #IDENTIFICATION_REFERENCE,
+      label: 'Travel Details',
+      parentId: 'GeneralInfoCollection',
+      position: 10
+    },
+    {
+      id: 'DatesFacet',
+      purpose: #STANDARD,
+      type: #FIELDGROUP_REFERENCE,
+      label: 'Dates & Costs',
+      parentId: 'GeneralInfoCollection',
+      targetQualifier: 'DatesAndCostsGroup',
+      position: 20
+    },
+    {
+      id: 'BookingsFacet',
+      purpose: #STANDARD,
+      type: #LINEITEM_REFERENCE,
+      label: 'Bookings',
+      position: 20,
+      targetElement: '_Booking'
+    }
+  ]
+
+  @UI.hidden: true
+  TravelUUID;
+
+  @UI: {
+    lineItem: [
+      { position: 10, importance: #HIGH, label: 'Travel ID' },
+      { type: #FOR_ACTION, dataAction: 'acceptTravel', label: 'Accept Travel', position: 1 },
+      { type: #FOR_ACTION, dataAction: 'rejectTravel', label: 'Reject Travel', position: 2 }
+    ],
+    identification: [{ position: 10, label: 'Travel ID' }],
+    selectionField: [{ position: 10 }]
+  }
+  TravelID;
+
+  @UI: {
+    lineItem: [{ position: 20, importance: #HIGH, label: 'Agency' }],
+    identification: [{ position: 20, label: 'Agency ID' }],
+    selectionField: [{ position: 20 }]
+  }
+  AgencyID;
+
+  @UI: {
+    lineItem: [{ position: 30, importance: #HIGH, label: 'Customer' }],
+    identification: [{ position: 30, label: 'Customer ID' }],
+    selectionField: [{ position: 30 }]
+  }
+  CustomerID;
+
+  @UI: {
+    lineItem: [{ position: 40, label: 'Starting Date' }],
+    fieldGroup: [{ qualifier: 'DatesAndCostsGroup', position: 10, label: 'Start Date' }]
+  }
+  BeginDate;
+
+  @UI: {
+    lineItem: [{ position: 50, label: 'End Date' }],
+    fieldGroup: [{ qualifier: 'DatesAndCostsGroup', position: 20, label: 'End Date' }]
+  }
+  EndDate;
+
+  @UI: {
+    fieldGroup: [{ qualifier: 'DatesAndCostsGroup', position: 30, label: 'Booking Fee' }]
+  }
+  BookingFee;
+
+  @UI: {
+    lineItem: [{ position: 60, importance: #HIGH, label: 'Total Price' }],
+    fieldGroup: [{ qualifier: 'DatesAndCostsGroup', position: 40, label: 'Total Price' }],
+    dataPoint: { qualifier: 'PriceData', title: 'Total Price' }
+  }
+  TotalPrice;
+
+  @UI: {
+    fieldGroup: [{ qualifier: 'DatesAndCostsGroup', position: 50, label: 'Currency' }]
+  }
+  CurrencyCode;
+
+  @UI: {
+    lineItem: [{ position: 70, importance: #MEDIUM, label: 'Description' }],
+    identification: [{ position: 40, label: 'Description' }]
+  }
+  Description;
+
+  @UI: {
+    lineItem: [
+      { position: 80, importance: #HIGH, label: 'Status', criticality: 'OverallStatus' }
+    ],
+    identification: [{ position: 50, label: 'Status' }],
+    selectionField: [{ position: 40 }],
+    dataPoint: { qualifier: 'StatusData', title: 'Status', criticality: 'OverallStatus' }
+  }
+  OverallStatus;
+
+  @UI.hidden: true
+  LocalLastChangedAt;
+}

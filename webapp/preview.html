@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Travels - ABAP RAP & SAP Fiori Elements</title>
+
+    <!-- Fiori Horizon styling -->
+    <style>
+        :root {
+            --sapBrandColor: #0070f2;
+            --sapHighlightColor: #0a6ed1;
+            --sapBackgroundColor: #f5f6f7;
+            --sapHeaderColor: #ffffff;
+            --sapTextColor: #1d2d3e;
+            --sapBorderColor: #d9d9d9;
+            --sapCardBg: #ffffff;
+            --sapSuccessColor: #2b7c2b;
+            --sapSuccessBg: #eef7ee;
+            --sapWarningColor: #b26b00;
+            --sapWarningBg: #fff7eb;
+            --sapErrorColor: #bb0000;
+            --sapErrorBg: #fde8e8;
+            --sapFont: "72", "72full", Arial, Helvetica, sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: var(--sapFont);
+            background-color: var(--sapBackgroundColor);
+            color: var(--sapTextColor);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Fiori Shell Bar */
+        .fiori-shellbar {
+            background-color: #354a5f;
+            color: #ffffff;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+        }
+        .fiori-shellbar-title {
+            font-size: 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .fiori-shellbar-badge {
+            background: #0070f2;
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: normal;
+        }
+
+        /* Container & Page Header */
+        .fiori-page {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        .fiori-header {
+            background: var(--sapHeaderColor);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            border: 1px solid var(--sapBorderColor);
+        }
+        .fiori-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .fiori-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 0 4px 0;
+        }
+        .fiori-subtitle {
+            font-size: 0.875rem;
+            color: #6a6d70;
+            margin: 0;
+        }
+
+        /* Smart Filter Bar */
+        .fiori-filterbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #edf0f2;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .filter-group label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .filter-group input, .filter-group select {
+            padding: 7px 12px;
+            border: 1px solid var(--sapBorderColor);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.875rem;
+            outline: none;
+            background: #fff;
+            min-width: 180px;
+        }
+        .filter-group input:focus, .filter-group select:focus {
+            border-color: var(--sapBrandColor);
+            box-shadow: 0 0 0 2px rgba(0, 112, 242, 0.2);
+        }
+
+        /* Smart Table & Controls */
+        .fiori-card {
+            background: var(--sapCardBg);
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            border: 1px solid var(--sapBorderColor);
+            overflow: hidden;
+        }
+        .table-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #edf0f2;
+        }
+        .table-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        .table-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+        }
+        .btn-primary {
+            background-color: var(--sapBrandColor);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background-color: var(--sapHighlightColor);
+        }
+        .btn-reject {
+            background-color: #bb0000;
+            color: #fff;
+        }
+        .btn-reject:hover {
+            background-color: #990000;
+        }
+        .btn-secondary {
+            background-color: #ffffff;
+            color: var(--sapTextColor);
+            border-color: var(--sapBorderColor);
+        }
+        .btn-secondary:hover {
+            background-color: #f7f9fa;
+        }
+
+        /* Data Table */
+        table.fiori-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+        table.fiori-table th {
+            text-align: left;
+            padding: 12px 16px;
+            background: #f7f9fa;
+            border-bottom: 1px solid var(--sapBorderColor);
+            font-weight: 600;
+            color: #555;
+            user-select: none;
+        }
+        table.fiori-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #edf0f2;
+            vertical-align: middle;
+        }
+        table.fiori-table tbody tr {
+            cursor: pointer;
+            transition: background 0.1s ease;
+        }
+        table.fiori-table tbody tr:hover {
+            background-color: #f0f7ff;
+        }
+        table.fiori-table tbody tr.selected {
+            background-color: #e5f1ff;
+            font-weight: 500;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8125rem;
+            font-weight: 600;
+        }
+        .status-badge.accepted {
+            color: var(--sapSuccessColor);
+            background: var(--sapSuccessBg);
+            border: 1px solid #b7e4b7;
+        }
+        .status-badge.open {
+            color: var(--sapWarningColor);
+            background: var(--sapWarningBg);
+            border: 1px solid #ffe2b3;
+        }
+        .status-badge.rejected {
+            color: var(--sapErrorColor);
+            background: var(--sapErrorBg);
+            border: 1px solid #f9c2c2;
+        }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #2b3642;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            font-size: 0.875rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Object Page Layout */
+        .object-page {
+            display: none;
+        }
+        .object-header {
+            background: #fff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--sapBorderColor);
+        }
+        .object-kpis {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #edf0f2;
+        }
+        .kpi-box {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .kpi-label {
+            font-size: 0.75rem;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        .kpi-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--sapTextColor);
+        }
+
+        .section-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--sapBorderColor);
+        }
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin: 0 0 1rem 0;
+            border-bottom: 1px solid #edf0f2;
+            padding-bottom: 0.5rem;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .form-field-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #666;
+        }
+        .form-field-value {
+            font-size: 0.9375rem;
+            font-weight: 500;
+            color: #1d2d3e;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Fiori Shell Bar -->
+    <header class="fiori-shellbar">
+        <div class="fiori-shellbar-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"></path>
+            </svg>
+            <span>SAP Fiori Launchpad</span>
+            <span class="fiori-shellbar-badge">ABAP RAP OData V4</span>
+        </div>
+    </header>
+
+    <!-- LIST REPORT VIEW -->
+    <main class="fiori-page" id="listReportView">
+        <section class="fiori-header">
+            <div class="fiori-title-row">
+                <div>
+                    <h1 class="fiori-title">Manage Travels</h1>
+                    <p class="fiori-subtitle">ABAP RESTful Application Programming Model (RAP) &bull; Service: <code>ZUI_RAP_TRAVEL_001_O4</code></p>
+                </div>
+                <div>
+                    <button class="btn btn-secondary" onclick="resetFilters()">Reset Filters</button>
+                </div>
+            </div>
+
+            <!-- Smart Filter Bar -->
+            <div class="fiori-filterbar">
+                <div class="filter-group">
+                    <label>Status Filter</label>
+                    <select id="statusFilter" onchange="applyFilters()">
+                        <option value="ALL">All Statuses</option>
+                        <option value="O">Open (O)</option>
+                        <option value="A">Accepted (A)</option>
+                        <option value="X">Rejected / Cancelled (X)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Search Description</label>
+                    <input type="text" id="searchInput" placeholder="Search keywords..." oninput="applyFilters()">
+                </div>
+                <div class="filter-group">
+                    <label>Agency</label>
+                    <input type="text" id="agencyInput" placeholder="Filter agency..." oninput="applyFilters()">
+                </div>
+            </div>
+        </section>
+
+        <!-- Smart Table Card -->
+        <section class="fiori-card">
+            <div class="table-toolbar">
+                <h2 class="table-title" id="tableTitleCount">Travels (4)</h2>
+                <div class="table-actions">
+                    <button class="btn btn-primary" onclick="triggerAction('accept')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        Accept Travel
+                    </button>
+                    <button class="btn btn-reject" onclick="triggerAction('reject')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        Reject Travel
+                    </button>
+                </div>
+            </div>
+
+            <table class="fiori-table">
+                <thead>
+                    <tr>
+                        <th style="width: 40px;"></th>
+                        <th>Travel ID</th>
+                        <th>Agency</th>
+                        <th>Customer</th>
+                        <th>Period</th>
+                        <th style="text-align: right;">Total Price</th>
+                        <th style="text-align: center;">Status</th>
+                        <th style="width: 60px;"></th>
+                    </tr>
+                </thead>
+                <tbody id="travelTableBody">
+                    <!-- Dynamic Rows Rendered Here -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <!-- OBJECT PAGE VIEW -->
+    <main class="fiori-page object-page" id="objectPageView">
+        <section class="object-header">
+            <div class="fiori-title-row">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <button class="btn btn-secondary" onclick="backToList()">
+                        &larr; Back to List
+                    </button>
+                    <div>
+                        <h1 class="fiori-title" id="opTravelId">Travel 10000001</h1>
+                        <p class="fiori-subtitle" id="opDescription">European Summer Business Tour</p>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-primary" onclick="triggerActionFromObject('accept')">Accept</button>
+                    <button class="btn btn-reject" onclick="triggerActionFromObject('reject')">Reject</button>
+                </div>
+            </div>
+
+            <!-- Header KPIs (Reflecting @UI.dataPoint & Header Facet) -->
+            <div class="object-kpis">
+                <div class="kpi-box">
+                    <span class="kpi-label">Status</span>
+                    <span id="opStatusBadge"></span>
+                </div>
+                <div class="kpi-box">
+                    <span class="kpi-label">Total Amount</span>
+                    <span class="kpi-value" id="opTotalPrice" style="color: var(--sapSuccessColor);">&euro; 1,150.00</span>
+                </div>
+                <div class="kpi-box">
+                    <span class="kpi-label">Booking Fee</span>
+                    <span class="kpi-value" id="opBookingFee">&euro; 50.00</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- General Info Facet -->
+        <section class="section-card">
+            <h2 class="section-title">General Information</h2>
+            <div class="form-grid">
+                <div class="form-field">
+                    <span class="form-field-label">TRAVEL ID</span>
+                    <span class="form-field-value" id="opFieldTravelId">10000001</span>
+                </div>
+                <div class="form-field">
+                    <span class="form-field-label">AGENCY</span>
+                    <span class="form-field-value" id="opFieldAgency">Sunset Travel Agency (070001)</span>
+                </div>
+                <div class="form-field">
+                    <span class="form-field-label">CUSTOMER</span>
+                    <span class="form-field-value" id="opFieldCustomer">Buchholm (000001)</span>
+                </div>
+                <div class="form-field">
+                    <span class="form-field-label">START DATE</span>
+                    <span class="form-field-value" id="opFieldBeginDate">2026-12-01</span>
+                </div>
+                <div class="form-field">
+                    <span class="form-field-label">END DATE</span>
+                    <span class="form-field-value" id="opFieldEndDate">2026-12-15</span>
+                </div>
+                <div class="form-field">
+                    <span class="form-field-label">CURRENCY</span>
+                    <span class="form-field-value" id="opFieldCurrency">EUR</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bookings Line Item Table (Composition _Booking) -->
+        <section class="fiori-card">
+            <div class="table-toolbar">
+                <h2 class="table-title">Bookings (Composition Child Entity)</h2>
+            </div>
+            <table class="fiori-table">
+                <thead>
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Airline</th>
+                        <th>Flight Number</th>
+                        <th>Flight Date</th>
+                        <th style="text-align: right;">Price</th>
+                        <th style="text-align: center;">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="bookingsTableBody">
+                    <!-- Bookings Rendered Here -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Application Controller Logic -->
+    <script>
+        // In-memory data store reflecting ABAP RAP tables
+        const travelData = [
+            {
+                TravelUUID: "42010aee-1801-1eed-9cb0-13f99aa00001",
+                TravelID: "10000001",
+                AgencyID: "070001",
+                AgencyName: "Sunset Travel Agency",
+                CustomerID: "000001",
+                CustomerName: "Buchholm",
+                BeginDate: "2026-12-01",
+                EndDate: "2026-12-15",
+                BookingFee: "50.00",
+                TotalPrice: "1150.00",
+                CurrencyCode: "EUR",
+                Description: "European Summer Business Tour",
+                OverallStatus: "O",
+                OverallStatusText: "Open",
+                _Booking: [
+                    { BookingID: "0001", CarrierID: "LH", ConnectionID: "0400", FlightDate: "2026-12-01", FlightPrice: "550.00", CurrencyCode: "EUR", BookingStatus: "B" },
+                    { BookingID: "0002", CarrierID: "LH", ConnectionID: "0401", FlightDate: "2026-12-15", FlightPrice: "550.00", CurrencyCode: "EUR", BookingStatus: "B" }
+                ]
+            },
+            {
+                TravelUUID: "42010aee-1801-1eed-9cb0-13f99aa00002",
+                TravelID: "10000002",
+                AgencyID: "070002",
+                AgencyName: "Fly High Logistics",
+                CustomerID: "000002",
+                CustomerName: "Becker",
+                BeginDate: "2026-11-20",
+                EndDate: "2026-11-28",
+                BookingFee: "30.00",
+                TotalPrice: "880.00",
+                CurrencyCode: "USD",
+                Description: "North American Tech Conference",
+                OverallStatus: "A",
+                OverallStatusText: "Accepted",
+                _Booking: [
+                    { BookingID: "0001", CarrierID: "AA", ConnectionID: "0015", FlightDate: "2026-11-20", FlightPrice: "850.00", CurrencyCode: "USD", BookingStatus: "B" }
+                ]
+            },
+            {
+                TravelUUID: "42010aee-1801-1eed-9cb0-13f99aa00003",
+                TravelID: "10000003",
+                AgencyID: "070003",
+                AgencyName: "Global Voyager Inc.",
+                CustomerID: "000003",
+                CustomerName: "Schmidt",
+                BeginDate: "2026-10-10",
+                EndDate: "2026-10-15",
+                BookingFee: "25.00",
+                TotalPrice: "450.00",
+                CurrencyCode: "EUR",
+                Description: "Cancelled Marketing Symposium",
+                OverallStatus: "X",
+                OverallStatusText: "Rejected",
+                _Booking: []
+            },
+            {
+                TravelUUID: "42010aee-1801-1eed-9cb0-13f99aa00004",
+                TravelID: "10000004",
+                AgencyID: "070001",
+                AgencyName: "Sunset Travel Agency",
+                CustomerID: "000004",
+                CustomerName: "Müller",
+                BeginDate: "2027-01-15",
+                EndDate: "2027-01-22",
+                BookingFee: "40.00",
+                TotalPrice: "1420.00",
+                CurrencyCode: "EUR",
+                Description: "Annual Executive Strategy Summit",
+                OverallStatus: "O",
+                OverallStatusText: "Open",
+                _Booking: [
+                    { BookingID: "0001", CarrierID: "BA", ConnectionID: "0102", FlightDate: "2027-01-15", FlightPrice: "1380.00", CurrencyCode: "EUR", BookingStatus: "B" }
+                ]
+            }
+        ];
+
+        let selectedTravelId = travelData[0].TravelID;
+        let currentFilteredList = [...travelData];
+
+        function getStatusBadge(status) {
+            if (status === 'A') {
+                return '<span class="status-badge accepted">&#10003; Accepted</span>';
+            } else if (status === 'X') {
+                return '<span class="status-badge rejected">&#10007; Rejected</span>';
+            } else {
+                return '<span class="status-badge open">&#9679; Open</span>';
+            }
+        }
+
+        function renderTable(list) {
+            const tbody = document.getElementById("travelTableBody");
+            tbody.innerHTML = "";
+
+            list.forEach(item => {
+                const tr = document.createElement("tr");
+                if (item.TravelID === selectedTravelId) {
+                    tr.classList.add("selected");
+                }
+                tr.onclick = (e) => {
+                    if (e.target.tagName !== 'BUTTON' && !e.target.closest('button')) {
+                        selectTravel(item.TravelID);
+                    }
+                };
+
+                tr.innerHTML = `
+                    <td style="text-align: center;">
+                        <input type="radio" name="travelSelect" ${item.TravelID === selectedTravelId ? 'checked' : ''} onchange="selectTravel('${item.TravelID}')">
+                    </td>
+                    <td>
+                        <strong>${item.TravelID}</strong>
+                        <div style="color: #666; font-size: 0.8125rem;">${item.Description}</div>
+                    </td>
+                    <td>${item.AgencyName} <span style="color:#888;">(${item.AgencyID})</span></td>
+                    <td>${item.CustomerName} <span style="color:#888;">(${item.CustomerID})</span></td>
+                    <td>${item.BeginDate} &rarr; ${item.EndDate}</td>
+                    <td style="text-align: right; font-weight: 600;">${item.CurrencyCode} ${parseFloat(item.TotalPrice).toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+                    <td style="text-align: center;">${getStatusBadge(item.OverallStatus)}</td>
+                    <td style="text-align: center;">
+                        <button class="btn btn-secondary" style="padding: 4px 8px;" onclick="openObjectPage('${item.TravelID}')" title="Drilldown to Object Page">&rsaquo;</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById("tableTitleCount").textContent = `Travels (${list.length})`;
+        }
+
+        function selectTravel(id) {
+            selectedTravelId = id;
+            renderTable(currentFilteredList);
+        }
+
+        function applyFilters() {
+            const status = document.getElementById("statusFilter").value;
+            const search = document.getElementById("searchInput").value.toLowerCase();
+            const agency = document.getElementById("agencyInput").value.toLowerCase();
+
+            currentFilteredList = travelData.filter(item => {
+                const matchStatus = (status === 'ALL' || item.OverallStatus === status);
+                const matchSearch = (!search || item.Description.toLowerCase().includes(search) || item.TravelID.includes(search));
+                const matchAgency = (!agency || item.AgencyName.toLowerCase().includes(agency) || item.AgencyID.includes(agency));
+                return matchStatus && matchSearch && matchAgency;
+            });
+
+            renderTable(currentFilteredList);
+        }
+
+        function resetFilters() {
+            document.getElementById("statusFilter").value = "ALL";
+            document.getElementById("searchInput").value = "";
+            document.getElementById("agencyInput").value = "";
+            applyFilters();
+            showToast("Filters reset to default.");
+        }
+
+        function triggerAction(actionType) {
+            const target = travelData.find(t => t.TravelID === selectedTravelId);
+            if (!target) {
+                showToast("Please select a travel record first.");
+                return;
+            }
+
+            if (actionType === 'accept') {
+                target.OverallStatus = 'A';
+                target.OverallStatusText = 'Accepted';
+                showToast(`Action 'acceptTravel' executed for Travel ${target.TravelID}`);
+            } else if (actionType === 'reject') {
+                target.OverallStatus = 'X';
+                target.OverallStatusText = 'Rejected';
+                showToast(`Action 'rejectTravel' executed for Travel ${target.TravelID}`);
+            }
+
+            applyFilters();
+        }
+
+        function triggerActionFromObject(actionType) {
+            triggerAction(actionType);
+            const target = travelData.find(t => t.TravelID === selectedTravelId);
+            if (target) {
+                document.getElementById("opStatusBadge").innerHTML = getStatusBadge(target.OverallStatus);
+            }
+        }
+
+        function openObjectPage(id) {
+            const item = travelData.find(t => t.TravelID === id);
+            if (!item) return;
+            selectedTravelId = id;
+
+            document.getElementById("opTravelId").textContent = `Travel ${item.TravelID}`;
+            document.getElementById("opDescription").textContent = item.Description;
+            document.getElementById("opStatusBadge").innerHTML = getStatusBadge(item.OverallStatus);
+            document.getElementById("opTotalPrice").textContent = `${item.CurrencyCode} ${parseFloat(item.TotalPrice).toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+            document.getElementById("opBookingFee").textContent = `${item.CurrencyCode} ${parseFloat(item.BookingFee).toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+
+            document.getElementById("opFieldTravelId").textContent = item.TravelID;
+            document.getElementById("opFieldAgency").textContent = `${item.AgencyName} (${item.AgencyID})`;
+            document.getElementById("opFieldCustomer").textContent = `${item.CustomerName} (${item.CustomerID})`;
+            document.getElementById("opFieldBeginDate").textContent = item.BeginDate;
+            document.getElementById("opFieldEndDate").textContent = item.EndDate;
+            document.getElementById("opFieldCurrency").textContent = item.CurrencyCode;
+
+            // Render child bookings
+            const bookingsTbody = document.getElementById("bookingsTableBody");
+            bookingsTbody.innerHTML = "";
+            if (item._Booking && item._Booking.length > 0) {
+                item._Booking.forEach(b => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td><strong>${b.BookingID}</strong></td>
+                        <td>${b.CarrierID}</td>
+                        <td>${b.ConnectionID}</td>
+                        <td>${b.FlightDate}</td>
+                        <td style="text-align: right; font-weight: 600;">${b.CurrencyCode} ${parseFloat(b.FlightPrice).toFixed(2)}</td>
+                        <td style="text-align: center;"><span class="status-badge accepted">Booked</span></td>
+                    `;
+                    bookingsTbody.appendChild(row);
+                });
+            } else {
+                bookingsTbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #888; padding: 2rem;">No bookings found for this travel.</td></tr>`;
+            }
+
+            document.getElementById("listReportView").style.display = "none";
+            document.getElementById("objectPageView").style.display = "block";
+            window.scrollTo(0, 0);
+        }
+
+        function backToList() {
+            document.getElementById("objectPageView").style.display = "none";
+            document.getElementById("listReportView").style.display = "block";
+            applyFilters();
+            window.scrollTo(0, 0);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById("toast");
+            toast.textContent = msg;
+            toast.classList.add("show");
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
+
+        // Initial render on page load
+        renderTable(travelData);
+    </script>
+</body>
+</html>

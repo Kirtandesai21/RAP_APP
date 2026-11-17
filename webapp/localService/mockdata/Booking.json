@@ -1,0 +1,47 @@
+[
+  {
+    "BookingUUID": "43010aee-1801-1eed-9cb0-13f99aa00001",
+    "TravelUUID": "42010aee-1801-1eed-9cb0-13f99aa00001",
+    "BookingID": "0001",
+    "BookingDate": "2026-11-15",
+    "CustomerID": "000001",
+    "CustomerName": "Buchholm",
+    "CarrierID": "LH",
+    "ConnectionID": "0400",
+    "FlightDate": "2026-12-01",
+    "FlightPrice": "550.00",
+    "CurrencyCode": "EUR",
+    "BookingStatus": "B",
+    "LocalLastChangedAt": "2026-11-17T08:00:00Z"
+  },
+  {
+    "BookingUUID": "43010aee-1801-1eed-9cb0-13f99aa00002",
+    "TravelUUID": "42010aee-1801-1eed-9cb0-13f99aa00001",
+    "BookingID": "0002",
+    "BookingDate": "2026-11-15",
+    "CustomerID": "000001",
+    "CustomerName": "Buchholm",
+    "CarrierID": "LH",
+    "ConnectionID": "0401",
+    "FlightDate": "2026-12-15",
+    "FlightPrice": "550.00",
+    "CurrencyCode": "EUR",
+    "BookingStatus": "B",
+    "LocalLastChangedAt": "2026-11-17T08:00:00Z"
+  },
+  {
+    "BookingUUID": "43010aee-1801-1eed-9cb0-13f99aa00003",
+    "TravelUUID": "42010aee-1801-1eed-9cb0-13f99aa00002",
+    "BookingID": "0001",
+    "BookingDate": "2026-11-16",
+    "CustomerID": "000002",
+    "CustomerName": "Becker",
+    "CarrierID": "AA",
+    "ConnectionID": "0015",
+    "FlightDate": "2026-11-20",
+    "FlightPrice": "850.00",
+    "CurrencyCode": "USD",
+    "BookingStatus": "B",
+    "LocalLastChangedAt": "2026-11-17T08:15:00Z"
+  }
+]
