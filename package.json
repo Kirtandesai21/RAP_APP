@@ -3,7 +3,14 @@
   "version": "1.0.0",
   "description": "Complete End-to-End Application using ABAP RESTful Application Programming Model (RAP) and SAP Fiori UI5 Elements",
   "scripts": {
-    "start": "python3 server.py"
+    "start": "python3 server.py",
+    "lint:abap": "npx @abaplint/cli abaplint.json",
+    "validate": "python3 -c \"import json, glob; [json.load(open(f)) for f in glob.glob('webapp/**/*.json', recursive=True)]\"",
+    "test": "npm run validate",
+    "deploy": "cf push rap-travel-fiori-elements"
+  },
+  "devDependencies": {
+    "@abaplint/cli": "^2.112.0"
   },
   "keywords": [
     "abap",
@@ -11,7 +18,9 @@
     "cds",
     "sapui5",
     "fiori-elements",
-    "odata-v4"
+    "odata-v4",
+    "ci-cd",
+    "sap-btp"
   ],
   "author": "Antigravity",
   "license": "Apache-2.0"

@@ -1,0 +1,58 @@
+{
+  "global": {
+    "files": "/src/**/*.*",
+    "skipGeneratedGatewayClasses": true,
+    "skipGeneratedPersistentClasses": true,
+    "skipGeneratedFunctionGroups": true
+  },
+  "syntax": {
+    "version": "Cloud",
+    "errorNamespace": "^(Z|Y)",
+    "globalConstants": [],
+    "globalMacros": []
+  },
+  "rules": {
+    "7bit_ascii": true,
+    "avoid_use": true,
+    "check_syntax": true,
+    "check_comments": false,
+    "cloud_types": true,
+    "colon_missing_space": true,
+    "commented_code": false,
+    "definitions_top": false,
+    "description_empty": false,
+    "empty_line_in_statement": false,
+    "empty_statement": true,
+    "empty_structure": true,
+    "exporting": true,
+    "functional_writing": true,
+    "indentation": true,
+    "keyword_case": {
+      "style": "upper"
+    },
+    "line_length": {
+      "length": 140
+    },
+    "method_length": false,
+    "mix_returning": true,
+    "names_no_dash": true,
+    "newline_between_methods": true,
+    "no_public_attributes": false,
+    "obsolete_statement": true,
+    "parser_error": true,
+    "parser_missing_space": true,
+    "prefer_is_not": true,
+    "prefer_raise_exception_new": true,
+    "prefer_returning_to_exporting": true,
+    "sequential_blank": {
+      "lines": 3
+    },
+    "tabl_enhancement_category": false,
+    "type_form_names": false,
+    "unsecure_fae": true,
+    "unused_variables": false,
+    "use_new": true,
+    "when_others_last": true,
+    "whitespace_end": true
+  }
+}

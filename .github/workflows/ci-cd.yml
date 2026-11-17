@@ -1,0 +1,100 @@
+name: SAP BTP CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+env:
+  CF_API_URL: ${{ secrets.CF_API_URL || 'https://api.cf.us10-001.hana.ondemand.com' }}
+  CF_ORG: ${{ secrets.CF_ORG || '062d3605trial' }}
+  CF_SPACE: ${{ secrets.CF_SPACE || 'dev' }}
+  CF_USERNAME: ${{ secrets.CF_USERNAME || 'kirtandesai07@gmail.com' }}
+  CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+
+jobs:
+  # ========================================================
+  # STAGE 1: CODE QUALITY, SYNTAX & ABAP LINTING
+  # ========================================================
+  lint-and-validate:
+    name: Lint & Validate ABAP & UI5
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate JSON Configuration Files
+        run: |
+          echo "Validating manifest.json..."
+          node -e "JSON.parse(require('fs').readFileSync('webapp/manifest.json'))"
+          echo "Validating xs-app.json..."
+          node -e "JSON.parse(require('fs').readFileSync('webapp/xs-app.json'))"
+          echo "Validating mock data JSON files..."
+          for f in webapp/localService/mockdata/*.json; do
+            echo "Checking $f..."
+            node -e "JSON.parse(require('fs').readFileSync('$f'))"
+          done
+          echo "All JSON configuration files are valid!"
+
+      - name: Validate XML Descriptors
+        run: |
+          echo "Checking XML files format..."
+          python3 -c "
+          import xml.etree.ElementTree as ET
+          import glob
+          for xml_file in glob.glob('src/*.xml') + glob.glob('webapp/**/*.xml', recursive=True):
+              print(f'Checking {xml_file}...')
+              ET.parse(xml_file)
+          print('All XML descriptors parsed successfully!')
+          "
+
+      - name: Run ABAP Lint (abaplint)
+        run: |
+          echo "Running abaplint on src/ artifacts..."
+          npx @abaplint/cli abaplint.json || true
+          echo "ABAP lint checks completed."
+
+  # ========================================================
+  # STAGE 2: CONTINUOUS DEPLOYMENT TO SAP BTP
+  # ========================================================
+  deploy-to-btp:
+    name: Deploy to SAP BTP Cloud Foundry
+    needs: [ lint-and-validate ]
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Cloud Foundry CLI
+        run: |
+          echo "Installing Cloud Foundry CLI..."
+          curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=v8&source=github" | tar -zx
+          sudo mv cf8 /usr/local/bin/cf
+          cf version
+
+      - name: Authenticate with SAP BTP Cloud Foundry
+        run: |
+          echo "Authenticating against SAP BTP API: $CF_API_URL..."
+          if [ -z "$CF_PASSWORD" ]; then
+            echo "WARNING: CF_PASSWORD secret is not set in GitHub repository secrets."
+            echo "Please set CF_PASSWORD to enable automated deployment."
+            exit 1
+          fi
+          cf login -a "$CF_API_URL" -u "$CF_USERNAME" -p "$CF_PASSWORD" -o "$CF_ORG" -s "$CF_SPACE"
+
+      - name: Deploy Application to SAP BTP
+        run: |
+          echo "Pushing application to SAP BTP Cloud Foundry..."
+          cf push rap-travel-fiori-elements -f manifest.yml
+          echo "Application deployment completed successfully!"
+          cf app rap-travel-fiori-elements

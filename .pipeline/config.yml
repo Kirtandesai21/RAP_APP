@@ -1,0 +1,18 @@
+# SAP Continuous Integration and Delivery (Project Piper) Configuration
+general:
+  cfApiEndpoint: 'https://api.cf.us10-001.hana.ondemand.com'
+  cfOrg: '062d3605trial'
+  cfSpace: 'dev'
+
+steps:
+  cloudFoundryDeploy:
+    deployTool: 'cf_native'
+    cloudFoundry:
+      appName: 'rap-travel-fiori-elements'
+      manifest: 'manifest.yml'
+
+stages:
+  build:
+    npmExecuteLint: false
+  deploy:
+    cloudFoundryDeploy: true
