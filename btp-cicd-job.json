@@ -1,0 +1,30 @@
+{
+  "name": "RAP_Travel_Fiori_Elements_CI_CD",
+  "description": "SAP BTP CI/CD Pipeline for ABAP RAP and Fiori Elements Application",
+  "repository": {
+    "branch": "master",
+    "configurationSource": "REPOSITORY",
+    "configFile": ".pipeline/config.yml"
+  },
+  "job": {
+    "type": "SAP_FIORI",
+    "stages": {
+      "build": {
+        "enabled": true
+      },
+      "additionalUnitTests": {
+        "enabled": true,
+        "npmScript": "validate"
+      },
+      "release": {
+        "enabled": true,
+        "deployTool": "cf_native",
+        "cfApiEndpoint": "https://api.cf.us10-001.hana.ondemand.com",
+        "cfOrg": "062d3605trial",
+        "cfSpace": "dev",
+        "cfAppName": "rap-travel-fiori-elements",
+        "cfManifest": "manifest.yml"
+      }
+    }
+  }
+}
